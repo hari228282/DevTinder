@@ -9,3 +9,28 @@
 - Difference b/w caraet and tilde (^ and ~)
 - what are dependicies
 - what is the use of "-g" whiel npm install package
+
+- Initialize git 
+- .gitignore
+- Create a remote repo on github 
+- push all code to remote origin
+- You have to play with routes extenesions ex.- /hello, hello/2, /xyz
+- Order of the routes matter a lot 
+- Install Postman app and make a workspace/collection > test API call
+- Write logic to handle GET, POST, DELETE API Calls and test them on Postman 
+- Explore routing and use of ?, +, (), * in the routes 
+- Use of regex in routes /a/ , /.*fly$/
+- Reading the query params in the routes
+- Reading the dynamic routes
+
+- Multple Route Handlers - Play with the code
+- next()
+- next function and errors along with res.send()
+- app.use("/route", rH, [rH2, rH3], rH4, rH5)
+- WHAT is a Middlware? Why do we need it ?
+- How express JS BASICALLY HANDLE REQUESTS BEHIND THE SCEENE
+- HTTPS STATUS CODE
+- Diffrence app.use and app.all
+- Write a dummy auth middlware for admin
+- Write a dummy auth middlware for all user routes, except /user/login
+- Error Handling using app.use{"/", (err, req, res, next)}

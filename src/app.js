@@ -1,23 +1,132 @@
 const express = require("express");
+const { AdminAuthMiddleware, UserAuthMiddleware } = require("./middlewares/auth");
 
 const app = express();
+
+// app.use("/user", (req, res, next) => {
+//     // Route handler for /user
+//      next(); // Call the next middleware or route handler
+//     res.send("Route handler for /user");
+//     console.log("Handling the route user");
+       
+    
+// }, (req, res) => {
+//     res.send("Second handler for /user");
+//     console.log("Handling the route user2");
+    
+// });
 
 // app.get("/", (req, res) => {
 //     res.send("Hello, World!");
 // });
 
-app.use("/devtinder", (req, res) => {
-    res.send("Hello, World! for DEVTINDER");
+
+// app.use("/dashboard", (req, res) => {
+//     res.send("Hello, World! for DEVTINDER DASHBOARD");
+// });
+
+
+// app.use("/dashboard2/yes", (req, res) => {
+//     res.send("Hello, World! for DEVTINDER DASHBOARD2 yes yes");
+// });
+
+// app.use("/dashboard2", (req, res) => {
+//     res.send("Hello, World! for DEVTINDER DASHBOARD2 yes");
+// });
+
+
+
+// app.use("/", (req, res) => {
+//     res.send("Hello, World! for DEVTINDER");
+// });
+
+// // todo GET /user => It checks all the app.xxx("matching route") functions
+// // todo GET /user => middlware chain => request handler => response
+// app.use("/", (req, res, next) => {
+//     // res.send("Handling the route /");
+//     next(); // Call the next middleware or route handler
+// });
+
+// app.get("/user", (req, res, next) => {
+//     // res.send("Hello, World! for DEVTINDER USER");
+//     console.log("Handling the route user 1");
+//     // next(); // Call the next middleware or route handler
+// });
+// app.get("/user", (req, res, next) => {
+//     res.send("Hello, World! for DEVTINDER USER2");
+//     console.log("Handling the route user 2");
+//     next(); // Call the next middleware or route handler
+// });
+
+// // todo Handle Auth for only admin routes for all GET POST PUT DELETE PATCH requests starting with /admin
+// app.use("/admin", AdminAuthMiddleware) // This will match all HTTP methods for routes starting with /admin
+
+// app.post("/user/login", (req, res) => {
+//     res.send("user logged in successfully");
+// });
+
+// app.get("/user/data", UserAuthMiddleware, (req, res) => {
+//     res.send("User data");
+// });
+
+// app.get("/admin/getAllData", (req, res) => {
+//     // Logic to fetch all data for admin
+//     // Check if the request is authorized for admin access
+//     // const token = "xyz123"
+//     // const isAdminAuthorized = token === "xyz"; // Example authorization check
+//     // if (isAdminAuthorized) {
+//     //   res.send("Admin data");
+//     // }
+//     // else {
+//     //     res.status(401).send("Unauthotized Access");
+//     // }
+//    res.send("Admin all data");
+// });
+
+// app.get("/admin/deleteUser", (req, res) => {
+//     // Logic to delete a user for admin
+//     // Check if the request is authorized for admin access
+//     // const token = "xyz123"
+//     // const isAdminAuthorized = token === "xyz"; // Example authorization check
+//     // if (isAdminAuthorized) {
+//     //   res.send("User deleted");
+//     // }
+//     // else {
+//     //     res.status(401).send("Unauthotized Access");
+//     // }
+//    res.send("User deleted");
+// });
+
+
+app.use("/", (err, req, res, next) => {
+    if(err) {
+        // Log the error for debugging purposes
+        console.error("Error occurred:", err);
+        res.status(500).send("Internal Server Error: " + err.message);  
+    }
 });
 
-app.use("/dashboard", (req, res) => {
-    res.send("Hello, World! for DEVTINDER DASHBOARD");
+app.get("/getUserData", (req, res) => {
+    // Logic to DB CALL AND GET THE DATA
+    try {
+       throw new Error("sdfghj");
+    res.send("User data");
+    }
+    catch(err) {
+     res.status(500).send("Some error occurred while fetching user data: " + err.message);
+    }
+    
 });
 
-app.use("/dashboard2", (req, res) => {
-    res.send("Hello, World! for DEVTINDER DASHBOARD2");
+app.use("/", (err, req, res, next) => {
+    if(err) {
+        // Log the error for debugging purposes
+        console.error("Error occurred:", err);
+        res.status(500).send("Internal Server Error: " + err.message);  
+    }
 });
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+
+app.listen(7777, () => {
+    console.log("Server is running on port 7777");
 });
