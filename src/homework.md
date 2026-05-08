@@ -33,4 +33,13 @@
 - Diffrence app.use and app.all
 - Write a dummy auth middlware for admin
 - Write a dummy auth middlware for all user routes, except /user/login
-- Error Handling using app.use{"/", (err, req, res, next)}
+- Error Handling using app.use{"/", (err, req, res, next) => {}}
+
+- Create a free cluster on mongodb official webiste (Mongo Atlas)
+- Install mongoose LIBRARY
+- Connect your application to the database /"Connection.url"/devTinder"
+- Call the connectDB function and connect to database before starting application on 7777
+- CrEATE A userSchema & userModel 
+- Creat a POST /signup API To add data to dataabase
+- Push some documents using API calls from the postman
+- Error Handling using tyr and catch

@@ -1,7 +1,8 @@
 const express = require("express");
-const { AdminAuthMiddleware, UserAuthMiddleware } = require("./middlewares/auth");
-
-const app = express();
+// const { AdminAuthMiddleware, UserAuthMiddleware } = require("./middlewares/auth");
+const connectDB = require("./config/database.js");
+const UserModel = require("./models/user.js");
+const app = express();  
 
 // app.use("/user", (req, res, next) => {
 //     // Route handler for /user
@@ -98,35 +99,71 @@ const app = express();
 // });
 
 
-app.use("/", (err, req, res, next) => {
-    if(err) {
-        // Log the error for debugging purposes
-        console.error("Error occurred:", err);
-        res.status(500).send("Internal Server Error: " + err.message);  
-    }
-});
+// app.use("/", (err, req, res, next) => {
+//     if(err) {
+//         // Log the error for debugging purposes
+//         console.error("Error occurred:", err);
+//         res.status(500).send("Internal Server Error: " + err.message);  
+//     }
+// });
 
-app.get("/getUserData", (req, res) => {
-    // Logic to DB CALL AND GET THE DATA
-    try {
-       throw new Error("sdfghj");
-    res.send("User data");
-    }
-    catch(err) {
-     res.status(500).send("Some error occurred while fetching user data: " + err.message);
-    }
+// app.get("/getUserData", (req, res) => {
+//     // Logic to DB CALL AND GET THE DATA
+//     try {
+//        throw new Error("sdfghj");
+//     res.send("User data");
+//     }
+//     catch(err) {
+//      res.status(500).send("Some error occurred while fetching user data: " + err.message);
+//     }
     
-});
+// });
 
-app.use("/", (err, req, res, next) => {
-    if(err) {
-        // Log the error for debugging purposes
-        console.error("Error occurred:", err);
-        res.status(500).send("Internal Server Error: " + err.message);  
+// app.use("/", (err, req, res, next) => {
+//     if(err) {
+//         // Log the error for debugging purposes
+//         console.error("Error occurred:", err);
+//         res.status(500).send("Internal Server Error: " + err.message);  
+//     }
+// });
+
+app.post("/signup", async (req, res) => {
+    // Logic to create a new user in the database
+    const user = new UserModel({
+        FirstName: "Hari",
+        LastName: "Om",
+        Email: "hari@example.com",
+        Password: "password123",
+        age: 24,
+        gender: "Male",
+    })
+
+    try {
+          await user.save();
+    res.send("User created successfully");
+    } catch (err) {
+        console.error("Error creating user:", err);
+        res.status(500).send("Internal Server Error: " + err.message);
     }
+
+    // const newUser = new UserModel(userObj);
+    // newUser.save()
+    //     .then(() => {
+    //         res.status(201).send("User created successfully");
+    //     })
+    //     .catch((err) => {
+    //         console.error("Error creating user:", err);
+    //         res.status(500).send("Internal Server Error: " + err.message);
+    //     });
 });
 
-
-app.listen(7777, () => {
+connectDB().then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(7777, () => {
     console.log("Server is running on port 7777");
 });
+}).catch((err) => {
+    console.error("Error connecting to MongoDB:", err);
+});
+
+
