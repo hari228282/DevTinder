@@ -127,16 +127,20 @@ const app = express();
 //     }
 // });
 
+app.use(express.json()); // Middleware to parse JSON request bodies
+
 app.post("/signup", async (req, res) => {
     // Logic to create a new user in the database
-    const user = new UserModel({
-        FirstName: "Hari",
-        LastName: "Om",
-        Email: "hari@example.com",
-        Password: "password123",
-        age: 24,
-        gender: "Male",
-    })
+    const user = new UserModel(req.body);
+    
+    // const user = new UserModel({
+    //     FirstName: "Hari",
+    //     LastName: "Om",
+    //     Email: "hari@example.com",
+    //     Password: "password123",
+    //     age: 24,
+    //     gender: "Male",
+    // })
 
     try {
           await user.save();

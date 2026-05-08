@@ -43,3 +43,7 @@
 - Creat a POST /signup API To add data to dataabase
 - Push some documents using API calls from the postman
 - Error Handling using tyr and catch
+
+- what is the diff bw js object and json
+- Add the express.json middlware to your app
+- Make your signup API dynamic to recieve data from the end user
