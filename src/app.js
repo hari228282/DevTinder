@@ -161,6 +161,97 @@ app.post("/signup", async (req, res) => {
     //     });
 });
 
+// todo Get user by email
+app.get("/user", async (req, res) => {
+    const userEmail = req.body._id;
+
+    try {
+        const user = await UserModel.findById({ _id: userEmail });
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+        res.send(user);
+    }
+    catch (err) {
+        console.error("Error fetching user:", err);
+        res.status(500).send("Internal Server Error: " + err.message);
+    }
+
+    // try {
+    //     const user = await UserModel.findOne({ Email: userEmail });
+    //     if (!user) {
+    //         return res.status(404).send("User not found");
+    //     }
+    //     res.send(user);
+    // }
+    // catch (err) {
+    //     console.error("Error fetching user:", err);
+    //     res.status(500).send("Internal Server Error: " + err.message);
+    // }
+
+//    try {
+//   const user = await UserModel.find({ Email: userEmail });
+//   if (user.length === 0) {
+//     return res.status(404).send("User not found");
+//   }
+//   else {
+//     res.send(user);
+//   }
+//    } 
+//    catch (err) {
+//     console.error("Error fetching user:", err);
+//     res.status(500).send("Internal Server Error: " + err.message);
+//    }
+}) 
+
+// TODO Feed API - GET /feed - get all the users from the database
+app.get("/feed", async(req, res) => {
+  try {
+        const users = await UserModel.find({});
+        res.send(users);
+  } 
+  catch (err) {
+    console.error("Error fetching feed:", err);
+    res.status(500).send("Internal Server Error: " + err.message);
+  }  
+})
+
+//todo DELETE /user - delete a user by id
+app.delete("/user", async (req, res) => {
+    const userId = req.body.userId;
+
+    try {
+        // const deletedUser = await UserModel.findByIdAndDelete({ _id: userId });
+        const deletedUser = await UserModel.findByIdAndDelete(userId);
+        res.send("User deleted successfully");
+    }
+    catch (err) {
+        console.error("Error deleting user:", err);
+        res.status(500).send("Internal Server Error: " + err.message);
+    }
+})
+
+// TODO Update a user from the database - PATCH
+app.patch("/user", async (req, res) => {
+    const userId = req.body._id;
+    const data = req.body;
+    console.log(data);
+
+    try {
+        const updatedUser = await UserModel.findByIdAndUpdate({_id: userId}, data, { returnDocument: "before" });
+        console.log(updatedUser);
+        
+        res.send("User updated successfully");
+        if (!updatedUser) {
+            return res.status(404).send("User not found");
+        }
+    }
+    catch (err) {
+        console.error("Error updating user:", err);
+        res.status(500).send("Internal Server Error: " + err.message);
+    }
+})
+
 connectDB().then(() => {
     console.log("Connected to MongoDB");
     app.listen(7777, () => {

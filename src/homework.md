@@ -47,3 +47,14 @@
 - what is the diff bw js object and json
 - Add the express.json middlware to your app
 - Make your signup API dynamic to recieve data from the end user
+
+- User.findOne with duplicate email ids, which object returned -> First One
+- API - GET user by Email
+- API - Feed API - get all the users from the document 
+- API - Get User by ID 
+- Create a delete user API 
+- dIFF bw PATCH & PUT
+- API - UPdate a user
+- Explore the mongoose document for models methods
+- What are options in a Model.findOneAndUpdate method, explore more about it.
+- API - UPDATE the user with email ID
