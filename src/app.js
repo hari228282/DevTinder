@@ -238,7 +238,10 @@ app.patch("/user", async (req, res) => {
     console.log(data);
 
     try {
-        const updatedUser = await UserModel.findByIdAndUpdate({_id: userId}, data, { returnDocument: "before" });
+        const updatedUser = await UserModel.findByIdAndUpdate({_id: userId}, data, { 
+            returnDocument: "before",
+            runValidators: true,
+         });
         console.log(updatedUser);
         
         res.send("User updated successfully");
@@ -248,7 +251,7 @@ app.patch("/user", async (req, res) => {
     }
     catch (err) {
         console.error("Error updating user:", err);
-        res.status(500).send("Internal Server Error: " + err.message);
+        res.status(500).send("Updation Failed: " + err.message);
     }
 })
 
