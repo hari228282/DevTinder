@@ -232,12 +232,26 @@ app.delete("/user", async (req, res) => {
 })
 
 // TODO Update a user from the database - PATCH
-app.patch("/user", async (req, res) => {
-    const userId = req.body._id;
+app.patch("/user/:userId", async (req, res) => {
+    const userId = req.params?.userId;
     const data = req.body;
-    console.log(data);
+    // console.log(data);
+
+    
 
     try {
+
+        // todo Allow only specific fields to be updated - photoUrl, about, skills, gender, age
+    const Allowed_Updates = [ "photoUrl", "about", "skills", "gender", "age"];
+    const requested_Updates = Object.keys(data).every((update) => Allowed_Updates.includes(update));
+
+    if (!requested_Updates) {
+        throw new Error("Invalid updates! Only photoUrl, about, skills, gender, and age can be updated.");
+    }
+
+    if(data?.skills?.length > 5) {
+        throw new Error("You can only have up to 5 skills.");
+    }
         const updatedUser = await UserModel.findByIdAndUpdate({_id: userId}, data, { 
             returnDocument: "before",
             runValidators: true,
