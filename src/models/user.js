@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require("validator");
 
 const userSchema = new mongoose.Schema({
     FirstName: {
@@ -17,12 +18,21 @@ const userSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
         trim: true,
-        match: [/\S+@\S+\.\S+/, 'Please use a valid email address.'],
-
+        // match: [/\S+@\S+\.\S+/, 'Please use a valid email address.'],
+        validate(value) {
+            if (!validator.isEmail(value)) {
+                throw new Error("Invalid email format");
+            }
+        }
     },
     Password: {
         type: String,
-        required: true
+        required: true,
+        validate(value) {
+            if (!validator.isStrongPassword(value)) {
+                throw new Error("Password is not strong enough. It should be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and symbols.");
+            }
+        }
     },
     age: {
         type: Number,
@@ -39,7 +49,12 @@ const userSchema = new mongoose.Schema({
     },
     photoUrl: {
         type: String,
-        default: "https://www.w3schools.com/howto/img_avatar.png"
+        default: "https://www.w3schools.com/howto/img_avatar.png",
+        validate(value) {
+            if (!validator.isURL(value)) {
+                throw new Error("Invalid URL format");
+            }
+        }
     },
     about: {
         type: String,
