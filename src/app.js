@@ -1,7 +1,10 @@
 const express = require("express");
+const bycrypt = require("bcrypt");
 // const { AdminAuthMiddleware, UserAuthMiddleware } = require("./middlewares/auth");
 const connectDB = require("./config/database.js");
 const UserModel = require("./models/user.js");
+const { ValidationSignupData } = require("./utils/validation.js");
+
 const app = express();  
 
 // app.use("/user", (req, res, next) => {
@@ -130,8 +133,24 @@ const app = express();
 app.use(express.json()); // Middleware to parse JSON request bodies
 
 app.post("/signup", async (req, res) => {
+
+    try {
+
+    // todo Validation of data
+    ValidationSignupData(req);
+
+    const { FirstName, LastName, Email, Password} = req.body;
+
+    //todo Encrypt the password
+    const PasswordHash = await bycrypt.hash(Password, 10);
+
     // Logic to create a new user in the database
-    const user = new UserModel(req.body);
+    const user = new UserModel({
+        FirstName,
+        LastName,
+        Email,
+        Password: PasswordHash,
+    });
     
     // const user = new UserModel({
     //     FirstName: "Hari",
@@ -142,12 +161,12 @@ app.post("/signup", async (req, res) => {
     //     gender: "Male",
     // })
 
-    try {
+    
           await user.save();
     res.send("User created successfully");
     } catch (err) {
         console.error("Error creating user:", err);
-        res.status(500).send("Internal Server Error: " + err.message);
+        res.status(500).send(" Error: " + err.message);
     }
 
     // const newUser = new UserModel(userObj);
@@ -160,6 +179,27 @@ app.post("/signup", async (req, res) => {
     //         res.status(500).send("Internal Server Error: " + err.message);
     //     });
 });
+
+app.post("/login", async (req, res) => {
+    try {
+      const { Email, Password } = req.body;
+      const user = await UserModel.findOne({ Email: Email });
+      if (!user) {
+        return res.status(404).send("Invalid Credentials");
+      }
+      const IsPasswordValid = await bycrypt.compare(Password, user.Password);
+      if (!IsPasswordValid) {
+        return res.status(401).send("Invalid Credentials");
+      }
+      else {
+        res.send("Login Successfull");
+      }
+        }
+    catch (err) {
+        res.status(500).send("Login Failed: "+ err.message);
+    }
+    
+})
 
 // todo Get user by email
 app.get("/user", async (req, res) => {

@@ -70,3 +70,11 @@
 - To INSTall validator
 - Explore Validator library function and use validator func for password, email
 - Never TRUSH req.body
+
+- Validate data in Signup API
+- Install bcrypt library
+- Create PasswordHash using bycrypt package
+- Create PasswordHash using bycrypt.hash & save the user is excrupted password
+
+- Create Login API 
+- Compare Password and throw error if email or password is invalid 
