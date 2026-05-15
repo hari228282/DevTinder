@@ -69,3 +69,4 @@
 - Data Sanitization -  Add API validation for each field
 - To INSTall validator
 - Explore Validator library function and use validator func for password, email
+- Never TRUSH req.body
