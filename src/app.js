@@ -1,11 +1,8 @@
 const express = require("express");
-const bycrypt = require("bcrypt");
 // const { AdminAuthMiddleware, UserAuthMiddleware } = require("./middlewares/auth");
 const connectDB = require("./config/database.js");
 const UserModel = require("./models/user.js");
-const { ValidationSignupData } = require("./utils/validation.js");
 const cookieParser = require("cookie-parser")
-const jwt = require("jsonwebtoken")
 
 const app = express();  
 
@@ -135,111 +132,13 @@ const app = express();
 app.use(express.json()); // Middleware to parse JSON request bodies
 app.use(cookieParser());
 
-app.post("/signup", async (req, res) => {
+const authRouter = require("./routes/auth.js");
+const requestRouter = require("./routes/request.js");
+const profileRouter = require("./routes/profile.js");
 
-    try {
-
-    // todo Validation of data
-    ValidationSignupData(req);
-
-    const { FirstName, LastName, Email, Password} = req.body;
-
-    //todo Encrypt the password
-    const PasswordHash = await bycrypt.hash(Password, 10);
-
-    // Logic to create a new user in the database
-    const user = new UserModel({
-        FirstName,
-        LastName,
-        Email,
-        Password: PasswordHash,
-    });
-    
-    // const user = new UserModel({
-    //     FirstName: "Hari",
-    //     LastName: "Om",
-    //     Email: "hari@example.com",
-    //     Password: "password123",
-    //     age: 24,
-    //     gender: "Male",
-    // })
-
-    
-          await user.save();
-    res.send("User created successfully");
-    } catch (err) {
-        console.error("Error creating user:", err);
-        res.status(500).send(" Error: " + err.message);
-    }
-
-    // const newUser = new UserModel(userObj);
-    // newUser.save()
-    //     .then(() => {
-    //         res.status(201).send("User created successfully");
-    //     })
-    //     .catch((err) => {
-    //         console.error("Error creating user:", err);
-    //         res.status(500).send("Internal Server Error: " + err.message);
-    //     });
-});
-
-app.post("/login", async (req, res) => {
-    try {
-      const { Email, Password } = req.body;
-      const user = await UserModel.findOne({ Email: Email });
-      if (!user) {
-        return res.status(404).send("Invalid Credentials");
-      }
-      const IsPasswordValid = await bycrypt.compare(Password, user.Password);
-      if (!IsPasswordValid) {
-        return res.status(401).send("Invalid Credentials");
-      }
-      else {
-
-        // Create a JWT Token
-        const token = await jwt.sign({_id: user._id}, "DEV@Tinder$900");
-        console.log(token);
-        
-
-        // And Add token to cookie and send the response back to the server
-        res.cookie("token", token);
-        res.send("Login Successfull");
-      }
-        }
-    catch (err) {
-        res.status(500).send("Login Failed: "+ err.message);
-    }
-    
-})
-
-app.get("/profile", async (req, res) => {
-  try { const cookies = req.cookies
-  
-    const { token } = cookies
-
-    if(!token) {
-        throw new Error("Invalid Token")
-    }
-
-    // Validate my token
-
-    const DecodedMessage = await jwt.verify(token, "DEV@Tinder$900");
-    const { _id } = DecodedMessage
-    console.log("User Logged In as :-" + _id )
-     
-    const user = await UserModel.findById(_id);
-
-    if(!user) {
-        throw new Error("User does not Exit");
-    }
-
-    res.send(user)
-   }
-   catch (err) {
-    res.status(400).send("Error: " + err.message)
-   }
-    
-})
+app.use("/auth", authRouter);
+app.use("/", requestRouter);
+app.use("/", profileRouter);
 
 // todo Get user by email
 app.get("/user", async (req, res) => {
